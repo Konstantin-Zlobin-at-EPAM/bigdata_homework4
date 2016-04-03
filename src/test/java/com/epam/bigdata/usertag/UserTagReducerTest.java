@@ -1,13 +1,14 @@
-package com.epam.bigdata;
+package com.epam.bigdata.usertag;
 
-import org.junit.*;
+import org.junit.Test;
 
 import static org.junit.Assert.assertTrue;
 
-public class UserTagCountToolTest {
+public class UserTagReducerTest {
 
     @Test
     public void testTheToolIsThere() {
         assertTrue(true == true);
     }
+
 }
