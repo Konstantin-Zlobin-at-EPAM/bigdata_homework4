@@ -36,6 +36,9 @@ public class UserTagCountTool extends Configured implements Tool {
         Configuration conf = new Configuration();
         conf.set("mapreduce.output.textoutputformat.separator", ",");
 
+        conf.set("mapreduce.map.output.compress", "true");
+        conf.set("mapreduce.map.output.compress.codec", "org.apache.hadoop.io.compress.SnappyCodec");
+
         Job job = Job.getInstance(conf, "tagcount");
 
         job.setJarByClass(UserTagCountTool.class);
