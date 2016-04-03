@@ -1,1 +1,0 @@
-/tmp/hadoop-konst/mapred/local/1459626292952/user.profile.tags.us.txt

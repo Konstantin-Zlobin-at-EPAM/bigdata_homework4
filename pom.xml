@@ -44,7 +44,8 @@
                     <archive>
                         <manifest>
                             <addClasspath>true</addClasspath>
-                            <mainClass>com.epam.bigdata.UserTagCountTool</mainClass>
+                            <!--<mainClass>com.epam.bigdata.UserTagCountTool</mainClass>-->
+                            <mainClass>com.epam.bigdata.VisitsAndSpendsByIPCountTool</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
