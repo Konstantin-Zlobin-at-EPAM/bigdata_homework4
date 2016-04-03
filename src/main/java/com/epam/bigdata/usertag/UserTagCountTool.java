@@ -50,12 +50,11 @@ public class UserTagCountTool extends Configured implements Tool {
         job.setOutputFormatClass(TextOutputFormat.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1] + "_" + System.currentTimeMillis()));
+        FileOutputFormat.setOutputPath(job, new Path(args[2] + "_" + System.currentTimeMillis()));
 
-        //it seems like -file parameter doesn't work, let's hardcode then
-        job.addCacheFile(new URI("/apps/homework3/user.profile.tags.us.txt"));
+        //it seems like -file parameter doesn't work for some reason, let's do workaround
+        job.addCacheFile(new URI(args[1]));
 
         return job.waitForCompletion(true) ? 0 : 1;
     }
-
 }

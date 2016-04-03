@@ -53,6 +53,25 @@ public class VSWritable implements Writable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        VSWritable that = (VSWritable) o;
+
+        if (visits != that.visits) return false;
+        return spends == that.spends;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (visits ^ (visits >>> 32));
+        result = 31 * result + (int) (spends ^ (spends >>> 32));
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "visits: " + visits + ", " + "spends: " + spends;
     }
