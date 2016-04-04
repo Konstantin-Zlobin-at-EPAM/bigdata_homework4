@@ -1,5 +1,6 @@
 package com.epam.bigdata.impressions;
 
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,7 +10,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public class BGReducer extends org.apache.hadoop.mapreduce.Reducer<
         IdTimestampComposedKey, LineIsImpressionValue,
-        IdTimestampComposedKey, Text> {
+        NullWritable, Text> {
     public static final String BIGGEST_IMPRESSIONS = "BIGGEST_IMPRESSIONS";
     private final static Logger LOG = LoggerFactory.getLogger(BGReducer.class);
 
@@ -23,7 +24,7 @@ public class BGReducer extends org.apache.hadoop.mapreduce.Reducer<
         long localSum = 0;
         for (LineIsImpressionValue val : values) {
             localSum += val.isImpression() ? 1 : 0;
-            context.write(null, val.getInitialLine());
+            context.write(NullWritable.get(), val.getInitialLine());
         }
         synchronized (this) {
             if ((!"null".equals(iPinYouID)) && localSum > biggestSumImpressions) {
