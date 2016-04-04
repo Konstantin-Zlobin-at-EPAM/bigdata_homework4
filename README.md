@@ -15,3 +15,7 @@ On local env:
 
 On a cluster:
 > yarn jar homework3-1.0.jar com.epam.bigdata.visitsspends.VSByIPCountTool -fs hdfs://big-azure:8020 -jt big-azure:8021 hdfs:///apps/homework3/dataset VSByIPShort
+
+## please note, output of VSByIPCountTool can be compressed and saved in a binary sequence format
+## in order to enable this feature, please, add ".bin" to the name of the output folder, "out.bin" for instance.
+
