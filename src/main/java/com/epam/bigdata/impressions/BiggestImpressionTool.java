@@ -4,7 +4,9 @@ package com.epam.bigdata.impressions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.NullWritable;
 import org.apache.hadoop.io.Text;
+import org.apache.hadoop.mapreduce.Counter;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
@@ -36,30 +38,38 @@ public class BiggestImpressionTool extends Configured implements Tool {
         Job job = Job.getInstance(conf, "biggest_impression");
 
         job.setJarByClass(BiggestImpressionTool.class);
-        job.setOutputKeyClass(IdTimestampComposedKey.class);
-        job.setOutputValueClass(LineIsImpressionValue.class);
+        job.setOutputKeyClass(NullWritable.class);
+        job.setOutputValueClass(Text.class);
+        job.setMapOutputKeyClass(IdTimestampComposedKey.class);
+        job.setMapOutputValueClass(LineIsImpressionValue.class);
 
         job.setMapperClass(BGMapper.class);
-//        job.setCombinerClass(BGReducer.class);
         job.setReducerClass(BGReducer.class);
 
         job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
 
+        job.setPartitionerClass(BGPartitioner.class);
+        job.setGroupingComparatorClass(BGGroupingComparator.class);
+
+        job.setNumReduceTasks(1);
+
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1] + "_" + System.currentTimeMillis()));
 
         int returnCode = job.waitForCompletion(true) ? 0 : 1;
-//        LOG.info("Custom counters:");
-//        LOG.info("\t" + BrowserCounterGroup.class.getSimpleName());
-//        Arrays.asList(BrowserCounterGroup.values()).stream().forEach((BrowserCounterGroup counter) -> {
-//            try {
-//                LOG.info("\t\t" + counter.name() + "=" + job.getCounters().findCounter(counter).getValue());
-//            } catch (IOException e) {
-//                LOG.error("cannot get counter: " + counter, e);
-//                throw new RuntimeException(e);
-//            }
-//        });
+
+        LOG.info("Reducer counters:");
+        LOG.info("\t" + BGReducer.BIGGEST_IMPRESSIONS);
+        long biggestImpressions = 0;
+        String biggestImpressionsIPinId = "none";
+        for (Counter counter : job.getCounters().getGroup(BGReducer.BIGGEST_IMPRESSIONS)) {
+            if (counter.getValue() > biggestImpressions) {
+                biggestImpressions = counter.getValue();
+                biggestImpressionsIPinId = counter.getName();
+            }
+        }
+        LOG.info("\tiPinId: " + biggestImpressionsIPinId + " = " + biggestImpressions + " (imprs.)");
         return returnCode;
     }
 

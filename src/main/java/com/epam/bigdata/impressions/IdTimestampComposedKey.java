@@ -10,7 +10,7 @@ import java.io.DataOutput;
 import java.io.IOException;
 
 public class IdTimestampComposedKey implements Writable, WritableComparable<IdTimestampComposedKey> {
-    private Text iPinYouId = new Text("");
+    private Text iPinYouId = new Text("?");
     private LongWritable timestamp = new LongWritable(0L);
 
     public IdTimestampComposedKey() {
@@ -82,7 +82,6 @@ public class IdTimestampComposedKey implements Writable, WritableComparable<IdTi
 
     @Override
     public String toString() {
-        // write nothing to output
-        return "";
+        return "iPinYouId: " + iPinYouId + ", timestamp: " + timestamp;
     }
 }

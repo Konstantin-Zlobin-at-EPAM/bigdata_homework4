@@ -74,6 +74,6 @@ public class LineIsImpressionValue implements Writable {
 
     @Override
     public String toString() {
-        return initialLine.toString();
+        return "initialLine: " + initialLine + ", isImpression: " + isImpression;
     }
 }

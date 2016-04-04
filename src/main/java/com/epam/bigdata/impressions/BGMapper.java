@@ -28,9 +28,6 @@ public class BGMapper extends org.apache.hadoop.mapreduce.Mapper<
         } catch (NumberFormatException nfe) {
             timestamp = 0L;
         }
-//        final BrowserCounterGroup detectedBrowser = Arrays.asList(BrowserCounterGroup.values()).stream()
-//                .filter(c -> userAgent.contains(c.name())).findFirst().orElse(BrowserCounterGroup.Unknown);
-//        context.getCounter(detectedBrowser).increment(1L);
         context.write(
                 new IdTimestampComposedKey(new Text(iPinYouId), new LongWritable(timestamp)),
                 new LineIsImpressionValue(value, "1".equals(streamId.trim()))
